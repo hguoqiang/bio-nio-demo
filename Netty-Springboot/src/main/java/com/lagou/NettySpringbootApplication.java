@@ -1,13 +1,29 @@
 package com.lagou;
 
+import com.lagou.netty.NettyWebSocketServer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NettySpringbootApplication {
+public class NettySpringbootApplication implements CommandLineRunner {
+
+    @Autowired
+    private NettyWebSocketServer nettyWebSocketServer;
 
     public static void main(String[] args) {
         SpringApplication.run(NettySpringbootApplication.class, args);
     }
 
+    /**
+     * spring容器启动完成后运行这个方法
+     * @param args
+     * @throws Exception
+     */
+    @Override
+    public void run(String... args) throws Exception {
+
+        new Thread(nettyWebSocketServer).start();
+    }
 }

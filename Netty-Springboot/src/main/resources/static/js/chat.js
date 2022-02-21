@@ -13,13 +13,36 @@ $(function () {
         }
     }
 
+    //创建websocket
+    let webSocket = new WebSocket("ws://localhost:8081/chat");
+
+    //打开websocket连接
+    webSocket.onopen = function () {
+        console.log("连接ws成功");//会触发 通道就绪事件，注意服务端日志
+    }
+
+
+    //接收服务器发来的消息
+    webSocket.onmessage = function (evt) {
+        showMessage(evt.data);
+    }
+
+    webSocket.onclose = function () {
+        console.log("连接关闭");
+    }
+    webSocket.onerror = function () {
+        console.log("连接异常");
+    }
+
     function showMessage(message) {
+        //张三:你好
+        let str = message.split(":");
         $("#msg_list").append(`<li class="active"}>
                                   <div class="main">
                                     <img class="avatar" width="30" height="30" src="/img/user.png">
                                     <div>
-                                        <div class="user_name">name</div>
-                                        <div class="text">消息</div>
+                                        <div class="user_name">${str[0]}</div>
+                                        <div class="text">${str[1]}</div>
                                     </div>                       
                                    </div>
                               </li>`);
@@ -71,6 +94,11 @@ $(function () {
                                   </div>
                               </li>`);
         $("#my_test").val('');
+
+        //发送消息，会触发通道的读就绪事件，看服务端日志
+        webSocket.send(username + ":" + message);
+
+
         // 置底
         setBottom();
     }

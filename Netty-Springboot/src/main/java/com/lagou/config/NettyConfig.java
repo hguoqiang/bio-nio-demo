@@ -1,5 +1,7 @@
 package com.lagou.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +12,13 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @ConfigurationProperties(prefix = "netty")
+@Getter
+@Setter
 public class NettyConfig {
     //netty监听的端口
     private int port;
     //websocket的访问路径
     private String path;
+
+
 }
